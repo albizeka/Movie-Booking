@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 $host="localhost"; // Host name 
 $username="root"; // Mysql username 
@@ -17,7 +17,17 @@ $userRow=mysql_fetch_array($res);
 
 $id = $_GET['id'];
 
+$rest = mysql_query("SELECT seat, movie_id, theatre_id, DATE, TIME FROM seats WHERE movie_id = '$id'");
 
+$rows = array();
 
+while ($r = mysql_fetch_assoc($rest)) {
+	$rows = $r;
+}
 
-?>
+print json_encode($rows);
+
+function seatReserved () {
+	$val = "dwa";
+	print json_encode($val);
+}
