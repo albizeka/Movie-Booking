@@ -53,27 +53,71 @@ $num_rows = mysql_num_rows($selectBasket);
 <!-- Latest compiled and minified JavaScript -->
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+      $("#filter").keyup(function(){
+   
+          // Retrieve the input field text and reset the count to zero
+          var filter = $(this).val(), count = 0;
+   
+          // Loop through the comment list
+          $("tbody tr").each(function(){
+   
+              // If the list item does not contain the text phrase fade it out
+              if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                  $(this).fadeOut();
+   
+              // Show the list item if the phrase matches and increase the count by 1
+              } else {
+                  $(this).show();
+                  count++;
+              }
+          });
+   
+          // Update the count
+          var numberItems = count;
+          $("#filter-count").text("Number of Comments = "+count);
+      });
+  });
+  </script>
+  <style type="text/css">
+  a {
+    color:white;
+    text-decoration: none;
+  }
+  a:hover {
+    color:white;
+  }
+
+  p {
+    color:black;
+  }
+  .la {
+    color: white;
+  }
+  </style>
 </head>
 <body>
-<div id="header">
+<!-- <div id="header">
   <div id="left">
     <label>cleartuts</label>
     </div>
     <div id="right">
       <div id="content">
-          hi' <?php echo $userRow['username']; ?>&nbsp;<a href="logout.php">Sign Out</a>
+         <a href="logout.php">Sign Out</a>
         </div>
     </div>
-    <?php if ($num_rows > 0) {
-     echo '<span class="pull-right" style="font-size: 20px;margin: -19px 21px;color:red;">';
-         echo '<a href="mybasket.php?id='.$_SESSION['user'].'"><i class="fa fa-film"></i> ('. $num_rows.')</a></span>';
-     } else { 
-       echo '<span class="pull-right" style="font-size: 20px;margin: -19px 21px;color:red;">';
-         echo '<a href="mybasket.php?id='.$_SESSION['user'].'"><i class="fa fa-film"></i> ('. $num_rows.')</a></span>';
-     } ?>
-</div>
-
+    
+</div> -->
+<nav class="navbar navbar-default navbar-fixed-top" style="background:#e74c3c;color:#fff;">
+  <div class="container">
+    <p class="navbar-text" style="color:white;"><?php echo $userRow['username']; ?></p>
+    <p class="navbar-text navbar-right"><a href="mybasket.php?id='"<?php $_SESSION['user']; ?>"'">My basket (<?php echo $num_rows; ?>)</a> <a href="logout.php" class="navbar-link la" style="color:white;">Log out</a></p>
+  </div>
+</nav>
 <div id="body">
+   <input type="text" class="text-input" id="filter" value="" />
+    <span id="filter-count"></span>
   <table class="table table-striped"> 
     <thead> 
       <tr> 
@@ -96,10 +140,10 @@ $num_rows = mysql_num_rows($selectBasket);
 
      while ($row = mysql_fetch_assoc($res)) {
         echo "<tr>";
-        echo "<td>". $row['movie_name']. "</td>";
+        echo "<td><a style='color:black;' href='movieDetails.php?id=".$row['movie_id']."'>". $row['movie_name']. "</a></td>";
         echo "<td>". $row['price']. "</td>";
         echo "<td>". $row['city_name']. "</td>";
-        echo "<td><a id='".$row['movie_id']."' onclick='thisFunc(this.id);' >Book this ticket</a></td>";
+        echo "<td><a  style='color:black;' id='".$row['movie_id']."' onclick='thisFunc(this.id);' >Book this ticket</a></td>";
         echo "<td><form action='admin.php' method='POST'><input type='text' style='display:none' name='tickets' id='field".$row['movie_id']."'><input type='text' style='display:none' name='mov' value='".$row['movie_id']."' id='fi".$row['movie_id']."'><input type='text' style='display:none' name='usr' value='".$row['movie_id']."' id='fm".$row['movie_id']."'><input type='submit' value='Book' style='display:none' class='btn btn-success' name='sbt' id='button".$row['movie_id']."'></form></td>";
         echo "</tr>";
      } 

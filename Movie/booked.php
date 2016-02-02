@@ -17,7 +17,4 @@ $userRow=mysql_fetch_array($res);
 
 $id = $_GET['id'];
 
-
-
-
 ?>
